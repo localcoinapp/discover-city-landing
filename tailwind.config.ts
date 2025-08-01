@@ -64,6 +64,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			fontFamily: {
+				'dynapuff': ['DynaPuff', 'sans-serif'],
+				'julius': ['Julius Sans One', 'sans-serif'],
+			},
 			backgroundImage: {
 				'gradient-sunset': 'var(--gradient-sunset)',
 				'gradient-ocean': 'var(--gradient-ocean)',

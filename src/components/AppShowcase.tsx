@@ -35,10 +35,10 @@ export const AppShowcase = () => {
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl font-dynapuff font-bold text-foreground mb-6">
             See Discover Florida in Action
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl font-julius text-muted-foreground max-w-3xl mx-auto">
             Real stories of how tourists and locals connect through our app
           </p>
         </div>
@@ -55,7 +55,7 @@ export const AppShowcase = () => {
                 <div className="inline-block px-4 py-2 bg-gradient-tropical text-white rounded-full text-sm font-medium">
                   {scenario.stats}
                 </div>
-                <h3 className="text-3xl font-bold text-foreground">
+                <h3 className="text-3xl font-dynapuff font-bold text-foreground">
                   {scenario.title}
                 </h3>
                 <p className="text-lg text-muted-foreground leading-relaxed">

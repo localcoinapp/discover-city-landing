@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   DollarSign, 
   Users, 
@@ -64,12 +65,31 @@ export const MerchantSection = () => {
       return;
     }
 
-    // Here you would typically send to your backend
-    // For now, we'll simulate sending to localcoinapp@gmail.com
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Save to Supabase
+      const { error } = await supabase
+        .from('partnership_inquiries')
+        .insert([{
+          business_name: formData.businessName,
+          contact_name: formData.contactName,
+          email: formData.email,
+          phone: formData.phone || null,
+          business_type: formData.businessType || null,
+          message: formData.message || null
+        }]);
+
+      if (error) throw error;
+
+      // Send notification email
+      const { error: emailError } = await supabase.functions.invoke('send-partnership-email', {
+        body: formData
+      });
+
+      if (emailError) {
+        console.error('Email error:', emailError);
+        // Don't fail the submission if email fails
+      }
+
       toast.success("Thank you! We'll contact you within 24 hours to discuss partnership opportunities.");
       
       // Reset form
@@ -81,7 +101,8 @@ export const MerchantSection = () => {
         businessType: "",
         message: ""
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Error:', error);
       toast.error("Something went wrong. Please try again or email us directly at localcoinapp@gmail.com");
     }
   };
@@ -91,10 +112,10 @@ export const MerchantSection = () => {
       <div className="container mx-auto px-4">
         {/* Merchant Benefits */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl font-dynapuff font-bold text-foreground mb-6">
             Partner with Discover Florida
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
+          <p className="text-xl font-julius text-muted-foreground max-w-3xl mx-auto mb-12">
             Join Florida's local business community and connect with customers who value authentic experiences
           </p>
           
@@ -118,7 +139,7 @@ export const MerchantSection = () => {
           <div className="bg-gradient-to-br from-muted/50 to-background rounded-3xl p-8 md:p-12 shadow-elegant">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl font-bold text-foreground mb-6">
+                <h3 className="text-3xl font-dynapuff font-bold text-foreground mb-6">
                   Ready to Grow Your Business?
                 </h3>
                 <div className="space-y-4 mb-8">

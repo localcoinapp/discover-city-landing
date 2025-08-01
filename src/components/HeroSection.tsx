@@ -2,16 +2,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import heroBeach from "@/assets/hero-beach.jpg";
 
 export const HeroSection = () => {
   const [email, setEmail] = useState("");
 
-  const handleWaitlistSignup = (e: React.FormEvent) => {
+  const handleWaitlistSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+
+    try {
+      // Save to Supabase
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([{ email }]);
+
+      if (error) throw error;
+
+      // Send notification email
+      const { error: emailError } = await supabase.functions.invoke('send-waitlist-email', {
+        body: { email }
+      });
+
+      if (emailError) {
+        console.error('Email error:', emailError);
+        // Don't fail the signup if email fails
+      }
+
       toast.success("Thanks for joining our waitlist! We'll notify you when Discover Florida launches.");
       setEmail("");
+    } catch (error: any) {
+      console.error('Error:', error);
+      if (error.message?.includes('duplicate')) {
+        toast.error("You're already on our waitlist!");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -28,14 +55,14 @@ export const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
         <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+          <h1 className="text-5xl md:text-7xl font-dynapuff font-bold leading-tight">
             Discover
             <span className="block bg-gradient-to-r from-white to-primary-glow bg-clip-text text-transparent">
               Florida
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl font-light leading-relaxed opacity-90">
+          <p className="text-xl md:text-2xl font-julius leading-relaxed opacity-90">
             Your all-in-one app to connect with local offers, deals, and experiences. 
             From restaurants to tours, events to shops – discover Florida like never before.
           </p>
