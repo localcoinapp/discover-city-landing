@@ -19,7 +19,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-white/10 mt-12 pt-8 text-center">
           <p className="text-white/60 text-sm">
-            © {currentYear} DiscoverFlorida.com
+            © {currentYear} DiscoverFlorida.live
           </p>
         </div>
       </div>
