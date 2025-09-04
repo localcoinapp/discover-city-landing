@@ -68,7 +68,7 @@ export const MerchantSection = () => {
     try {
       // Save to Supabase
       const { error } = await supabase
-        .from('partnership_inquiries')
+        .from('florida_partnership_inquiries')
         .insert([{
           business_name: formData.businessName,
           contact_name: formData.contactName,
